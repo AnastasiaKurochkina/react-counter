@@ -1,13 +1,6 @@
 .counterContainer {
     margin-bottom: 20px;
 }
-.button {
-    color: #a78456;
-    background-color: #eecb9a;
-    min-width: 40px;
-    min-height: 40px;
-    cursor: pointer;
-}
 .counter {
     font-size: 22px;
     font-weight: 600;

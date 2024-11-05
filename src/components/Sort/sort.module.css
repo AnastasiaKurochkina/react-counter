@@ -1,0 +1,12 @@
+.timeSortContainer {
+    display: flex;
+    align-items: center;
+}
+.timeSort {
+    background: none;
+    border: none;
+    color: #a78456;
+    padding: 10px;
+    cursor: pointer;
+}
+

@@ -1,8 +1,11 @@
 import { useCallback, useState } from "react";
-import { Timer } from "./components/Timer/Timer";
 import { Counter } from "./components/Counter/Counter";
 import styles from "./app.module.css";
-import Sort from "./assets/icons/sort.svg";
+import Modal from "./components/Modal/Modal";
+import { Button } from "./components/Button/Button";
+import { History } from "./components/History/History";
+import { Select } from "./components/Select/Select";
+import { Sort } from "./components/Sort/Sort";
 
 export enum EventTypes {
   increment = "increment",
@@ -24,6 +27,7 @@ const App = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [sortTime, setSortTime] = useState(true);
   const [selectType, setSelectType] = useState<EventTypes | null>(null);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const typeEvents = EventTypes;
 
   const addEvent = useCallback(
@@ -35,12 +39,16 @@ const App = () => {
         time: `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`,
       };
       setEvents((prevEvents) => [...prevEvents, event]);
-      if (type === selectType) {
+      if (type === selectType || selectType === null) {
         setFilteredEvents((prevState) => [...prevState, event]);
       }
     },
     [selectType]
   );
+
+  const handleOpenModal = () => {
+    setIsOpenModal((prev) => !prev);
+  };
 
   const handleHistory = () => {
     setShowHistory((prevState) => !prevState);
@@ -67,45 +75,28 @@ const App = () => {
   return (
     <>
       <div className={styles.container}>
-        <Counter addEvent={addEvent} />
-        <Timer addEvent={addEvent} />
-        <button className={styles.button} onClick={handleHistory}>
-          История
-        </button>
-        {showHistory && events.length > 0 && (
-          <>
-            <div className={styles.historyAction}>
-              <div className={styles.timeSortContainer}>
-                <button className={styles.timeSort} onClick={handleSortTime}>
-                  {sortTime ? "Сначала старые" : "Сначала новые"}{" "}
-                </button>
-                <img src={Sort} alt="sort" />
-              </div>
-              <select
-                className={styles.select}
-                onChange={(e) => handleSortType(e)}
-              >
-                <option value="">Все типы</option>
-                <option value={typeEvents.increment}>
-                  Увеличение счетчика
-                </option>
-                <option value={typeEvents.decrement}>
-                  Уменьшение счетчика
-                </option>
-                <option value={typeEvents.reset}>Сброс счетчика</option>
-                <option value={typeEvents.play}>Запуск таймера</option>
-                <option value={typeEvents.stop}>Остановка таймера</option>
-              </select>
-            </div>
-            <ul className={styles.history}>
-              {filteredEvents.map((item, index) => (
-                <li className={styles.historyItem} key={index}>
-                  {item.type} - {item.date} - {item.time}
-                </li>
-              ))}
-            </ul>
-          </>
+        <Counter addEvent={addEvent} onOpenModal={handleOpenModal} />
+        {isOpenModal && (
+          <Modal onClose={handleOpenModal}>
+            <h2>Счетчик не может быть отрицательным!</h2>
+            <button onClick={handleOpenModal}>Закрыть</button>
+          </Modal>
         )}
+        <div className={styles.historyContainer}>
+          <Button onClick={handleHistory}>История</Button>
+          {showHistory && events.length > 0 && (
+            <>
+              <div className={styles.historyAction}>
+                <Sort handleSortTime={handleSortTime} sortTime={sortTime} />
+                <Select
+                  handleSortType={handleSortType}
+                  typeEvents={typeEvents}
+                />
+              </div>
+              <History events={filteredEvents} />
+            </>
+          )}
+        </div>
       </div>
     </>
   );
