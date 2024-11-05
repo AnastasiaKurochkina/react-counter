@@ -12,7 +12,7 @@ export const Counter: React.FC<TimerProps> = memo(
   ({ addEvent, onOpenModal }) => {
     const [counter, setCounter] = useState(0);
     const [number, setNumber] = useState("");
-    const [timer, setTimer] = useState(false)
+    const [timerActive, setTimerActive] = useState(false)
 
     const increment = () => {
       setCounter((prevState) => prevState + 1);
@@ -43,23 +43,25 @@ export const Counter: React.FC<TimerProps> = memo(
     };
 
     const handlePlay = () => {
-      setTimer(prev => !prev)
-      addEvent(EventTypes.play);
+      if (!timerActive && number) {
+        setTimerActive(true)
+        addEvent(EventTypes.play);
+      }
     }
 
-    const handeStop = () => {
-      setTimer(prev => !prev)
+    const handleStop = () => {
+      setTimerActive(false)
       addEvent(EventTypes.stop);
     }
 
     useEffect(() => {
-      let a: NodeJS.Timeout | null = null
-      if (timer && number) {
-        a = setTimeout(() => setCounter((prevState) => prevState + Number(number)), 1000);
-      } else if (a) {
-        clearTimeout(a);
+      let timer: NodeJS.Timeout | null = null
+      if (timerActive && number) {
+        timer = setTimeout(() => setCounter((prevState) => prevState + Number(number)), 1000);
+      } else if (timer) {
+        clearTimeout(timer);
       }
-    }, [counter, timer]);
+    }, [number, timerActive, counter]);
 
     return (
       <>
@@ -81,7 +83,7 @@ export const Counter: React.FC<TimerProps> = memo(
         <div className={styles.actionContainer}>
           <Button onClick={resetCounter}>Сбросить счетчик</Button>
           <Button onClick={handlePlay}>Play</Button>
-          <Button onClick={handeStop}>Stop</Button>
+          <Button onClick={handleStop}>Stop</Button>
         </div>
       </>
     );

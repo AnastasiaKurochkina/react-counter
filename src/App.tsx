@@ -79,7 +79,7 @@ const App = () => {
         {isOpenModal && (
           <Modal onClose={handleOpenModal}>
             <h2>Счетчик не может быть отрицательным!</h2>
-            <button onClick={handleOpenModal}>Закрыть</button>
+            <Button onClick={handleOpenModal}>Закрыть</Button>
           </Modal>
         )}
         <div className={styles.historyContainer}>
