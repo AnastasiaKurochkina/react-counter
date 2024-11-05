@@ -1,42 +1,15 @@
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
-.button {
-    color: #a78456;
-    background-color: #eecb9a;
-    min-width: 120px;
-    min-height: 40px;
-    cursor: pointer;
-}
-.history {
-    list-style-type: none;
-}
-.historyItem {
-    border: 1px solid #eecb9a;
-    padding: 10px;
-    text-align: center;
-}
-.timeSort {
-    background: none;
-    border: none;
-    color: #a78456;
-    padding: 10px;
-    cursor: pointer;
-}
-.select {
-    background: none;
-    border: none;
-    color: #a78456;
-    padding: 10px;
-    cursor: pointer;
-}
-.timeSortContainer {
-    display: flex;
-    align-items: center;
+.historyContainer {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .historyAction {
-    display: flex;
+  display: flex;
 }
